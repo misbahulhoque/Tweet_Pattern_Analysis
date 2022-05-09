@@ -8,6 +8,7 @@ from nltk.tokenize import word_tokenize
 
 nltk.download('wordnet')
 
+# special filter word definition
 def more_stopwords():
     stop_words = ['a', 'about', 'above', 'across', 'after', 'afterwards']
     stop_words += ['again', 'against', 'all', 'almost', 'alone', 'along']
@@ -65,6 +66,7 @@ def more_stopwords():
     'aint', 'hes', 'doesnt', 'wouldnt','whats', 'theres', 'heres', 'w', 'th', 'https','wont', 'yeah', 'theyre','h']
     return stop_words
 
+# get stopwords list
 def getStopwords(filter_words = None, special_filter = False):
     stop_words = set(stopwords.words('english'))
     if special_filter:
@@ -76,6 +78,7 @@ def getStopwords(filter_words = None, special_filter = False):
         stop_words = stop_words.union(filter_words)
     return stop_words
 
+# remove stopwords from the tweet text list
 def removeStopwords(textList, filter_words = None, special_filter = False):
     processedText = []
     stop_words = getStopwords(filter_words, special_filter)
@@ -84,22 +87,26 @@ def removeStopwords(textList, filter_words = None, special_filter = False):
         processedText.append(tokens)
     return processedText
 
+# writing to csv file
 def csvFileAppend(filename, row):
     csvfile = io.open(filename, 'a', encoding='utf-8', newline="")
     csvwriter = csv.writer(csvfile)
     csvwriter.writerow(row)
     csvfile.close()
 
+# read from csv to df
 def read_csv2df(filename):
     df = pd.read_csv(filename, encoding='utf-8')
     return df
 
+# return 29 covid-19-related keywords
 def covidKeywords():
     words = "covid covid19 covid2019 covid_19 coronavirus virus COVD COVD19 2019nCoV WuhanVirus wuhan SARSCoV2 SARS novelcoronavirus rona therona missrona outbreak pandemic CoronavirusOutbreak CoronavirusPandemic CoronaOutbreak SocialDistancing StayAtHome StayHome quarantine lockdown mask WearAMask"
     keywords = words.split(" ")
     keywords.append("'corona -beer'")
     return keywords
 
+# check whether a tweet is covid related or not?
 def isCovidRelated(tweet):
     keywords = covidKeywords()
     for key in keywords:
@@ -107,6 +114,7 @@ def isCovidRelated(tweet):
             return True
     return False
 
+# check if a key exist in the json document.
 def existsKeys(doc, keys):      # return None if kesys not exist
     key = keys.pop(0)
     if key in doc:
