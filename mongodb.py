@@ -1,19 +1,18 @@
 from pymongo import MongoClient
+import preprocessor, utilities
 
-import sys
-sys.path.append('C:/Users/mhoqu12/Desktop/FirstPaper/Utilities/')
-import utilities
-
+# get db client from mongodb using hostname, post, database name
 def getDB(host, port, database):
     client = MongoClient(host, port)
     db = client[database]
     return client, db
 
+# get documents for a specific query
 def getDocuments(client, db, col, query = None):
     docs = db[col].find(query)
     return docs
 
-# get only text with or without truncated.
+# get only tweet text with or without truncated.
 def getTweet(client, db, col, query = None):
     tweet = []
     with client.start_session() as session:
@@ -37,7 +36,7 @@ def getFullTweet(client, db, col, query = None, version = 1):
             client.admin.command('refreshSessions', [session.session_id], session=session)
     return tweet
 
-
+# get list of tweet id for a query
 def getTweetID(client, db, col, query = None):
     tweetID = []
     with client.start_session() as session:
@@ -50,6 +49,7 @@ def getTweetID(client, db, col, query = None):
             client.admin.command('refreshSessions', [session.session_id], session=session)
     return tweetID
 
+# get tweet count for a query.
 def getTweetCount(client, db, col, query = None):
     tweet_count = db[col].find(query).count()
     return tweet_count
